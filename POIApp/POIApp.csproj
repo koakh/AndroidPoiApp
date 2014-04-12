@@ -56,6 +56,7 @@
   <ItemGroup>
     <Compile Include="IPOIDataService.cs" />
     <Compile Include="MainActivity.cs" />
+    <Compile Include="POIJsonService.cs" />
     <Compile Include="PointOfInterest.cs" />
     <Compile Include="Resources\Resource.Designer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
