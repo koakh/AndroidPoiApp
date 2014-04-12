@@ -5,6 +5,6 @@
   <uses-sdk android:minSdkVersion="15" android:targetSdkVersion="15" />
   <application 
     android:label="POIApp" 
-    android:icon="@drawable/Icon">
+    android:icon="@drawable/ic_app">
   </application>
 </manifest>
