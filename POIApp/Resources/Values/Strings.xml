@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="Hello">Hello World, Click Me!</string>
-    <string name="ApplicationName">POIApp</string>
+  <string name="ApplicationName">POIApp</string>
+  <string name="MenuNew">New</string>
+  <string name="MenuRefresh">Refresh</string>
 </resources>

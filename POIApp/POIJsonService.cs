@@ -20,7 +20,7 @@ namespace POIApp
       if (!Directory.Exists(_storagePath)) Directory.CreateDirectory(_storagePath);
     }
 
-    #region IPOIDataService implementation
+      #region IPOIDataService implementation
 
     public IReadOnlyList<PointOfInterest> POIs
     {

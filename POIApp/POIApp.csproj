@@ -55,8 +55,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="IPOIDataService.cs" />
+    <Compile Include="POIData.cs" />
     <Compile Include="POIListActivity.cs" />
     <Compile Include="POIJsonService.cs" />
+    <Compile Include="POIListViewAdapter.cs" />
     <Compile Include="PointOfInterest.cs" />
     <Compile Include="Resources\Resource.Designer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -77,6 +79,9 @@
   <ItemGroup>
     <Content Include="Properties\AndroidManifest.xml" />
     <AndroidResource Include="Resources\Drawable\ic_app.png" />
+    <AndroidResource Include="Resources\Menu\POIListViewMenu.xml" />
+    <AndroidResource Include="Resources\Drawable\ic_new.png" />
+    <AndroidResource Include="Resources\Drawable\ic_refresh.png" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
