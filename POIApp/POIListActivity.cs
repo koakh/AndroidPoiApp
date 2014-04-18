@@ -67,6 +67,5 @@ namespace POIApp
       PointOfInterest poi = POIData.Service.GetPOI((int)e.Id);
       Console.WriteLine("POIClicked: Name is {0}", poi.Name);
     }
-
   }
 }

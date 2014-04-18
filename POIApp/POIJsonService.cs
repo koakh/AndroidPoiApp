@@ -20,8 +20,7 @@ namespace POIApp
       if (!Directory.Exists(_storagePath)) Directory.CreateDirectory(_storagePath);
     }
 
-      #region IPOIDataService implementation
-
+    #region IPOIDataService implementation
     public IReadOnlyList<PointOfInterest> POIs
     {
       get { return _pois; }
@@ -70,11 +69,9 @@ namespace POIApp
       File.Delete(GetFilename(poi.Id.Value));
       _pois.Remove(poi);
     }
-
     #endregion
 
     #region Helper Functions
-
     private int GetNextId()
     {
       if (_pois.Count == 0)
@@ -87,8 +84,6 @@ namespace POIApp
     {
       return Path.Combine(_storagePath, "poi" + id.ToString() + ".json");
     }
-
     #endregion
-
   }
 }

@@ -3,4 +3,5 @@
   <string name="ApplicationName">POIApp</string>
   <string name="MenuNew">New</string>
   <string name="MenuRefresh">Refresh</string>
+  <string name="pathAppData">/mnt/shared/SharedFolder/</string>
 </resources>
