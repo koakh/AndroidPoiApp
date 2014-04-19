@@ -74,7 +74,7 @@
     <AndroidResource Include="Resources\Layout\POIList.xml" />
   </ItemGroup>
   <ItemGroup>
-    <AndroidResource Include="Resources\Values\strings.xml" />
+    <AndroidResource Include="Resources\Values\Strings.xml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Properties\AndroidManifest.xml" />
@@ -82,10 +82,10 @@
     <AndroidResource Include="Resources\Menu\POIListViewMenu.xml" />
     <AndroidResource Include="Resources\Drawable\ic_new.png" />
     <AndroidResource Include="Resources\Drawable\ic_refresh.png" />
-    <AndroidResource Include="Resources\Values\integers.xml">
+    <AndroidResource Include="Resources\Values\Integers.xml">
       <SubType>Designer</SubType>
     </AndroidResource>
-    <AndroidResource Include="Resources\Values\bools.xml" />
+    <AndroidResource Include="Resources\Values\Bools.xml" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
