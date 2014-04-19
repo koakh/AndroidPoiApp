@@ -28,7 +28,7 @@ namespace POIApp
       _adapter = new POIListViewAdapter(this);
       _poiListView.Adapter = _adapter;
 
-      //Events
+      //hook _poiListView up the event handler.
       _poiListView.ItemClick += POIClicked;
     }
 
@@ -62,10 +62,11 @@ namespace POIApp
       }
     }
 
+    //Process ListView Item Clicks
     protected void POIClicked(object sender, ListView.ItemClickEventArgs e)
     {
-      PointOfInterest poi = POIData.Service.GetPOI((int)e.Id);
-      Console.WriteLine("POIClicked: Name is {0}", poi.Name);
+      PointOfInterest poi = POIData.Service.GetPOI((int) e.Id);
+      Console.WriteLine("POIClicked: Id: {0}, Name: {1}", poi.Id, poi.Name);
     }
   }
 }

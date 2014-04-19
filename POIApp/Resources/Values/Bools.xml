@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+  <!--If True use pathAppData and not default sdcard location-->
+  <bool name="useCustomAppData">true</bool>
+</resources>

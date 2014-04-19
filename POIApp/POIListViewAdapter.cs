@@ -50,7 +50,7 @@ namespace POIApp
       // The first parameter of Inflate is a resource ID and the 
       // second is a root ViewGroup, which in this case can be left null 
       // since the view will be added to the ListView item when it is returned.
-      //var view = _context.LayoutInflater.Inflate(Resource.Layout.POIListItem, null);
+      // var view = _context.LayoutInflater.Inflate(Resource.Layout.POIListItem, null);
 
       // The GetView() method accepts a parameter named convertView, 
       // which is of type View. When a view is available for reuse, convertView will contain a reference to the view; 
@@ -62,7 +62,6 @@ namespace POIApp
       // Now that we have an instance of the view, 
       // we need to populate the fields. The View class defines a named FindViewById<T> method, 
       // which returns a typed instance of a widget contained in the view.
-
       PointOfInterest poi = POIData.Service.POIs[position];
 
       // The following code returns access to the nameTextView and sets the Text property:
@@ -80,6 +79,5 @@ namespace POIApp
     }
 
     #endregion
-
   }
 }
