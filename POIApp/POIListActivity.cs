@@ -30,6 +30,10 @@ namespace POIApp
 
       //hook _poiListView up the event handler.
       _poiListView.ItemClick += POIClicked;
+
+      //Test use string resources
+      //Android.Content.Res.Resources res = this.Resources;
+      //Console.WriteLine(res.GetString(Resource.String.pathAppDataFolder));
     }
 
     // The OnCreateOptionsMenu() method is called to give an opportunity 
