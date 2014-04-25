@@ -9,6 +9,11 @@ using Android.OS;
 
 namespace POIApp
 {
+  static class GlobalApp
+  {
+    public static string TAG = "POIApp";
+  }
+  
   [Activity(Label = "POIs", MainLauncher = true)]
   public class POIListActivity : Activity
   {
@@ -49,7 +54,7 @@ namespace POIApp
       switch (item.ItemId)
       {
         case Resource.Id.actionNew:
-          // place holder for creating new poi
+          StartActivity(typeof(POIDetailActivity));
           return true;
 
         case Resource.Id.actionRefresh:
@@ -69,8 +74,13 @@ namespace POIApp
     //Process ListView Item Clicks
     protected void POIClicked(object sender, ListView.ItemClickEventArgs e)
     {
-      PointOfInterest poi = POIData.Service.GetPOI((int) e.Id);
-      Console.WriteLine("POIClicked: Id: {0}, Name: {1}", poi.Id, poi.Name);
+      //PointOfInterest poi = POIData.Service.GetPOI((int) e.Id);
+      //Console.WriteLine("POIClicked: Id: {0}, Name: {1}", poi.Id, poi.Name);
+
+      // setup the intent to pass the POI id to the detail view
+      Intent poiDetailIntent = new Intent(this, typeof(POIDetailActivity));
+      poiDetailIntent.PutExtra("poiId", (int) e.Id);
+      StartActivity(poiDetailIntent);
     }
   }
 }

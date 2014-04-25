@@ -56,6 +56,7 @@
   <ItemGroup>
     <Compile Include="IPOIDataService.cs" />
     <Compile Include="POIData.cs" />
+    <Compile Include="POIDetailActivity.cs" />
     <Compile Include="POIListActivity.cs" />
     <Compile Include="POIJsonService.cs" />
     <Compile Include="POIListViewAdapter.cs" />
@@ -67,6 +68,9 @@
     <None Include="Resources\AboutResources.txt" />
     <None Include="Assets\AboutAssets.txt" />
     <AndroidResource Include="Resources\Layout\POIListItem.xml">
+      <SubType>AndroidResource</SubType>
+    </AndroidResource>
+    <AndroidResource Include="Resources\Layout\POIDetail.xml">
       <SubType>AndroidResource</SubType>
     </AndroidResource>
   </ItemGroup>
@@ -86,6 +90,12 @@
       <SubType>Designer</SubType>
     </AndroidResource>
     <AndroidResource Include="Resources\Values\Bools.xml" />
+    <AndroidResource Include="Resources\Drawable\ic_locate.png" />
+    <AndroidResource Include="Resources\Drawable\ic_map.png" />
+    <AndroidResource Include="Resources\Drawable\ic_new_picture.png" />
+    <AndroidResource Include="Resources\Menu\POIDetailMenu.xml" />
+    <AndroidResource Include="Resources\Drawable\ic_delete.png" />
+    <AndroidResource Include="Resources\Drawable\ic_save.png" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
