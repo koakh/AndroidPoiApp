@@ -9,16 +9,26 @@ using Android.OS;
 using Android.Runtime;
 using Android.Views;
 using Android.Widget;
+using Android.Locations;
+using Android.Util;
 
 namespace POIApp
 {
   public class POIListViewAdapter : BaseAdapter<PointOfInterest>
   {
+    //Resources
+    Android.Content.Res.Resources _r;
+    //Store Context
     private readonly Activity _context;
+    // The POIListActivity class will use this property to communicate location changes to the adapter
+    public Location CurrentLocation { get; set; }
 
     public POIListViewAdapter(Activity context)
     {
       _context = context;
+
+      //Get Resources from Context
+      _r = _context.Resources;
     }
 
     #region BaseAdapter<PointOfInterest> implementation
@@ -74,6 +84,28 @@ namespace POIApp
         view.FindViewById<TextView>(Resource.Id.addrTextView).Visibility = ViewStates.Gone;
       else
         view.FindViewById<TextView>(Resource.Id.addrTextView).Text = poi.Address;
+
+      // Calculate the distance between the CurrentLocation and a POI's location properties
+      if ((CurrentLocation != null) && (poi.Latitude.HasValue) && (poi.Longitude.HasValue))
+      {
+        Location poiLocation = new Location("");
+        // Get Values from Poi Data Service
+        poiLocation.Latitude = poi.Latitude.Value;
+        poiLocation.Longitude = poi.Longitude.Value;
+        
+        // Calculate Distance
+        float distance = CurrentLocation.DistanceTo(poiLocation) / 1000;
+
+        // Assign Calculated Distance to distanceTextView
+        view.FindViewById<TextView>(Resource.Id.distanceTextView).Text = String.Format("{0:0,0.00} {1}", distance, _r.GetString(Resource.String.unitOfLengthKm));
+        
+        Log.Info(GlobalApp.TAG, String.Format("distance: [{0}]", distance));
+      }
+      else
+      {
+        // Assign Unknown Distance to distanceTextView
+        view.FindViewById<TextView>(Resource.Id.distanceTextView).Text = "??";
+      }
 
       return view;
     }

@@ -1,0 +1,5 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<resources>
+  <!--Meters to Miles Conversion Table [1 m = 0.000621371 miles]-->
+  <item name="floatMetersToMilesMultiplier" format="float" type="dimen">0.000621371</item>
+</resources>

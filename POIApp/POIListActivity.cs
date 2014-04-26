@@ -7,6 +7,7 @@ using Android.Views;
 using Android.Widget;
 using Android.OS;
 using Android.Util;
+using Android.Locations;
 
 namespace POIApp
 {
@@ -16,10 +17,11 @@ namespace POIApp
   }
   
   [Activity(Label = "POIs", MainLauncher = true)]
-  public class POIListActivity : Activity
+  public class POIListActivity : Activity, ILocationListener
   {
     ListView _poiListView;
     POIListViewAdapter _adapter;
+    LocationManager _locMgr;
 
     protected override void OnCreate(Bundle bundle)
     {
@@ -29,6 +31,9 @@ namespace POIApp
 
       // Set our view from the "POIList" layout resource
       SetContentView(Resource.Layout.POIList);
+
+      // request an LocationService instance
+      _locMgr = GetSystemService(Context.LocationService) as LocationManager;
 
       // Hooking up POIListViewAdapter
       _poiListView = FindViewById<ListView>(Resource.Id.poiListView);
@@ -61,6 +66,15 @@ namespace POIApp
 
       //Notify BaseAdapter<> of Data Changes
       _adapter.NotifyDataSetChanged();
+
+      // Specifying the criteria for the desired Location Provider
+      Criteria criteria = new Criteria();
+      criteria.Accuracy = Accuracy.NoRequirement;
+      criteria.PowerRequirement = Power.NoRequirement;
+
+      string provider = _locMgr.GetBestProvider(criteria, true);
+
+      _locMgr.RequestLocationUpdates(provider, 20000, 100, this);
     }
 
     // Another activity is taking focus (this activity is about to be "paused").
@@ -68,6 +82,9 @@ namespace POIApp
     {
       base.OnPause();
       Log.Info(GlobalApp.TAG, "OnPause()");
+
+      // Remove Location Provider Remove Updates
+      _locMgr.RemoveUpdates(this);
     }
 
     // The activity is no longer visible (it is now "stopped")
@@ -125,5 +142,29 @@ namespace POIApp
       poiDetailIntent.PutExtra("poiId", (int) e.Id);
       StartActivity(poiDetailIntent);
     }
+
+    #region ILocationListener implementation
+
+    public void OnLocationChanged(Location location)
+    {
+      // Set CurrentLocation on POIListViewAdapter when a location change is received
+      _adapter.CurrentLocation = location;
+      // call NotifyDataSetChange() to cause the ListView to be refreshed
+      _adapter.NotifyDataSetChanged();
+    }
+
+    public void OnProviderDisabled(string provider)
+    {
+    }
+
+    public void OnProviderEnabled(string provider)
+    {
+    }
+
+    public void OnStatusChanged(string provider, Availability status, Bundle extras)
+    {
+    }
+
+    #endregion
   }
 }

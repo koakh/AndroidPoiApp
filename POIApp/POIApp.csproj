@@ -68,7 +68,7 @@
     <None Include="Resources\AboutResources.txt" />
     <None Include="Assets\AboutAssets.txt" />
     <AndroidResource Include="Resources\Layout\POIListItem.xml">
-      <SubType>AndroidResource</SubType>
+      <SubType>Designer</SubType>
     </AndroidResource>
     <AndroidResource Include="Resources\Layout\POIDetail.xml">
       <SubType>AndroidResource</SubType>
@@ -96,6 +96,7 @@
     <AndroidResource Include="Resources\Menu\POIDetailMenu.xml" />
     <AndroidResource Include="Resources\Drawable\ic_delete.png" />
     <AndroidResource Include="Resources\Drawable\ic_save.png" />
+    <AndroidResource Include="Resources\Values\Floats.xml" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

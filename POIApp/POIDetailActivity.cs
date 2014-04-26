@@ -10,16 +10,19 @@ using Android.Runtime;
 using Android.Views;
 using Android.Widget;
 using Android.Util;
+using Android.Locations;
 
 namespace POIApp
 {
   [Activity(Label = "POIDetailActivity")]
-  public class POIDetailActivity : Activity
+  public class POIDetailActivity : Activity, ILocationListener
   {
     //Resources
     Android.Content.Res.Resources _r;
     // Private declarations 
     PointOfInterest _poi;
+    LocationManager _locMgr;
+
     // Bind Widgets to Private Variables
     EditText _nameEditText;
     EditText _descrEditText;
@@ -27,13 +30,23 @@ namespace POIApp
     EditText _latEditText;
     EditText _longEditText;
     ImageView _poiImageView;
+    ImageButton _locationImageButton;
+    ImageButton _mapImageButton;
+    ImageButton _photoImageButton;
 
+    ProgressDialog _progressDialog;
+    bool _obtainingLocation = false;
+    
     protected override void OnCreate(Bundle bundle)
     {
       base.OnCreate(bundle);
 
       SetContentView(Resource.Layout.POIDetail);
 
+      // Get LocationManager Reference
+      _locMgr = GetSystemService(Context.LocationService) as LocationManager;
+
+      //Get Resources
       _r = this.Resources;
 
       //bind private variables to user interface widget
@@ -43,6 +56,14 @@ namespace POIApp
       _latEditText = FindViewById<EditText>(Resource.Id.latEditText);
       _longEditText = FindViewById<EditText>(Resource.Id.longEditText);
       _poiImageView = FindViewById<ImageView>(Resource.Id.poiImageView);
+      _locationImageButton = FindViewById<ImageButton>(Resource.Id.locationImageButton);
+      _mapImageButton = FindViewById<ImageButton>(Resource.Id.mapImageButton);
+      _photoImageButton = FindViewById<ImageButton>(Resource.Id.photoImageButton);
+
+      // Event Handlers
+      _locationImageButton.Click += GetLocationClicked;
+      _mapImageButton.Click += MapClicked;
+      _photoImageButton.Click += NewPhotoClicked;
 
       // Private declarations PointOfInterest _poi;
       if (Intent.HasExtra("poiId"))
@@ -200,5 +221,75 @@ namespace POIApp
       toast.Show();
       Finish();
     }
+
+    protected void GetLocationClicked(object sender, EventArgs e)
+    {
+      _obtainingLocation = true;
+      _progressDialog = ProgressDialog.Show(this, "", "Obtaining location...");
+      
+      Criteria criteria = new Criteria();
+      criteria.Accuracy = Accuracy.NoRequirement;
+      criteria.PowerRequirement = Power.NoRequirement;
+
+      _locMgr.RequestSingleUpdate(criteria, this, null);
+    }
+
+    private void MapClicked(object sender, EventArgs e)
+    {
+    }
+
+    private void NewPhotoClicked(object sender, EventArgs e)
+    {
+    }
+
+    #region ILocationListener implementation
+
+    public void OnLocationChanged(Location location)
+    {
+      _latEditText.Text = location.Latitude.ToString(); 
+      _longEditText.Text = location.Longitude.ToString();
+
+      // Reverse GeoCoding
+      Geocoder geocdr = new Geocoder(this);
+      IList<Address> addresses = geocdr.GetFromLocation(location.Latitude, location.Longitude, 5);
+
+      if (addresses.Any())
+      {
+        UpdateAddressFields(addresses.First());
+      }
+
+      _progressDialog.Cancel();
+      _obtainingLocation = false;
+    }
+
+    protected void UpdateAddressFields(Address addr)
+    {
+      if (String.IsNullOrEmpty(_nameEditText.Text))
+        _nameEditText.Text = addr.FeatureName;
+
+      if (String.IsNullOrEmpty(_addrEditText.Text))
+      {
+        for (int i = 0; i < addr.MaxAddressLineIndex; i++)
+        {
+          if (!String.IsNullOrEmpty(_addrEditText.Text))
+            _addrEditText.Text += System.Environment.NewLine;
+          _addrEditText.Text += addr.GetAddressLine(i);
+        }
+      }
+    }
+
+    public void OnProviderDisabled(string provider)
+    {
+    }
+
+    public void OnProviderEnabled(string provider)
+    {
+    }
+
+    public void OnStatusChanged(string provider, Availability status, Bundle extras)
+    {
+    }
+
+    #endregion
   }
 }

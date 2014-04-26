@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-  <!--<string name="ApplicationTag">POIApp</string>-->
+
   <string name="ApplicationName">POIApp</string>
   <string name="MenuNew">New</string>
   <string name="MenuRefresh">Refresh</string>
@@ -16,7 +16,9 @@
   <string name="msgDialogPOIDelete">Are you sure you want to delete POI {0}?</string>
 
   <string name="msgToastPOIDeletet">POI {0} deleted.</string>
-  
 
+  <string name="unitOfLengthMiles">miles</string>
+  <string name="unitOfLengthMetre">metre</string>
+  <string name="unitOfLengthKm">km</string>
 
 </resources>
