@@ -16,6 +16,8 @@ namespace POIApp
   [Activity(Label = "POIDetailActivity")]
   public class POIDetailActivity : Activity
   {
+    //Resources
+    Android.Content.Res.Resources _r;
     // Private declarations 
     PointOfInterest _poi;
     // Bind Widgets to Private Variables
@@ -31,6 +33,8 @@ namespace POIApp
       base.OnCreate(bundle);
 
       SetContentView(Resource.Layout.POIDetail);
+
+      _r = this.Resources;
 
       //bind private variables to user interface widget
       _nameEditText = FindViewById<EditText>(Resource.Id.nameEditText);
@@ -99,19 +103,102 @@ namespace POIApp
           DeletePOI();
           return true;
 
-        default: 
+        default:
           return base.OnOptionsItemSelected(item);
       }
     }
 
-    private void DeletePOI()
+    private bool Validate()
     {
-      throw new NotImplementedException();
+      bool isValid = true;
+
+      if (String.IsNullOrEmpty(_nameEditText.Text))
+      {
+        _nameEditText.Error = _r.GetString(Resource.String.msgValidatePOIName);
+        isValid = false;
+      }
+      else
+        _nameEditText.Error = null;
+
+      double? tempLatitude = null;
+      if (!String.IsNullOrEmpty(_latEditText.Text))
+      {
+        try
+        {
+          tempLatitude = Double.Parse(_latEditText.Text);
+          if ((tempLatitude > 90) | (tempLatitude < -90))
+          {
+            _latEditText.Error = _r.GetString(Resource.String.msgValidatePOILatitudeDecimalRange);
+            isValid = false;
+          }
+          else
+            _latEditText.Error = null;
+        }
+        catch
+        {
+          _latEditText.Error = _r.GetString(Resource.String.msgValidatePOILatitudeDecimal);
+          isValid = false;
+        }
+      }
+
+      double? tempLongitude = null;
+      if (!String.IsNullOrEmpty(_longEditText.Text))
+      {
+        try
+        {
+          tempLongitude = Double.Parse(_longEditText.Text);
+          if ((tempLongitude > 180) | (tempLongitude < -180))
+          {
+            _longEditText.Error = _r.GetString(Resource.String.msgValidatePOILongitudeDecimalRange);
+            isValid = false;
+          }
+          else
+            _longEditText.Error = null;
+        }
+        catch
+        {
+          _longEditText.Error = _r.GetString(Resource.String.msgValidatePOILongitudeDecimal);
+          isValid = false;
+        }
+      }
+
+      return isValid;
     }
 
     private void SavePOI()
     {
-      throw new NotImplementedException();
+      if (Validate())
+      {
+        _poi.Name = _nameEditText.Text;
+        _poi.Description = _descrEditText.Text;
+        _poi.Address = _addrEditText.Text;
+        _poi.Latitude = Double.Parse(_latEditText.Text);
+        _poi.Longitude = Double.Parse(_longEditText.Text);
+
+        POIData.Service.SavePOI(_poi);
+        //Finish Activity
+        Finish();
+      }
+    }
+
+    protected void DeletePOI()
+    {
+      AlertDialog.Builder alertConfirm = new AlertDialog.Builder(this);
+      alertConfirm.SetCancelable(false);
+      //ConfirmDelete EventHandler
+      alertConfirm.SetPositiveButton("OK", ConfirmDelete);
+      //Empty event handler
+      alertConfirm.SetNegativeButton("Cancel", delegate { });
+      alertConfirm.SetMessage(String.Format(_r.GetString(Resource.String.msgDialogPOIDelete), _poi.Name));
+      alertConfirm.Show();
+    }
+
+    protected void ConfirmDelete(object sender, EventArgs e)
+    {
+      POIData.Service.DeletePOI(_poi);
+      Toast toast = Toast.MakeText(this, String.Format(_r.GetString(Resource.String.msgToastPOIDeletet), _poi.Name), ToastLength.Short);
+      toast.Show();
+      Finish();
     }
   }
 }

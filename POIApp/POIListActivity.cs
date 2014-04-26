@@ -6,6 +6,7 @@ using Android.Runtime;
 using Android.Views;
 using Android.Widget;
 using Android.OS;
+using Android.Util;
 
 namespace POIApp
 {
@@ -24,6 +25,7 @@ namespace POIApp
     {
       //Call SuperClass OnCreate
       base.OnCreate(bundle);
+      Log.Info(GlobalApp.TAG, "OnCreate()");
 
       // Set our view from the "POIList" layout resource
       SetContentView(Resource.Layout.POIList);
@@ -35,10 +37,51 @@ namespace POIApp
 
       //hook _poiListView up the event handler.
       _poiListView.ItemClick += POIClicked;
+    }
 
-      //Test use string resources
-      //Android.Content.Res.Resources res = this.Resources;
-      //Console.WriteLine(res.GetString(Resource.String.pathAppDataFolder));
+    // Called after the activity has been stopped, just prior to it being started again. Always followed by onStart()
+    protected override void OnRestart()
+    {
+      base.OnRestart();
+      Log.Info(GlobalApp.TAG, "OnRestart()");
+    }
+
+    // The activity is about to become visible.
+    protected override void OnStart()
+    {
+      base.OnStart();
+      Log.Info(GlobalApp.TAG, "OnStart()");
+    }
+
+    // The activity has become visible (it is now "resumed").
+    protected override void OnResume()
+    {
+      base.OnResume();
+      Log.Info(GlobalApp.TAG, "OnResume()");
+
+      //Notify BaseAdapter<> of Data Changes
+      _adapter.NotifyDataSetChanged();
+    }
+
+    // Another activity is taking focus (this activity is about to be "paused").
+    protected override void OnPause()
+    {
+      base.OnPause();
+      Log.Info(GlobalApp.TAG, "OnPause()");
+    }
+
+    // The activity is no longer visible (it is now "stopped")
+    protected override void OnStop()
+    {
+      base.OnStop();
+      Log.Info(GlobalApp.TAG, "OnStop()");
+    }
+
+    // The activity is about to be destroyed.
+    protected override void OnDestroy()
+    {
+      base.OnDestroy();
+      Log.Info(GlobalApp.TAG, "OnDestroy()");
     }
 
     // The OnCreateOptionsMenu() method is called to give an opportunity 

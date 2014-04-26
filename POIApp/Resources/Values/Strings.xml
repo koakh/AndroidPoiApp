@@ -6,4 +6,17 @@
   <string name="MenuRefresh">Refresh</string>
   <string name="pathAppData">/mnt/shared/SharedFolder</string>
   <string name="pathAppDataFolder">POIApp</string>
+
+  <string name="msgValidatePOIName">Name cannot be empty</string>
+  <string name="msgValidatePOILatitudeDecimalRange">Latitude must be a decimal value between -90 and 90</string>
+  <string name="msgValidatePOILatitudeDecimal">Latitude must be valid decimal number</string>
+  <string name="msgValidatePOILongitudeDecimalRange">Longitude must be a decimal value between -180 and 180</string>
+  <string name="msgValidatePOILongitudeDecimal">Longitude must be valid decimal number</string>
+
+  <string name="msgDialogPOIDelete">Are you sure you want to delete POI {0}?</string>
+
+  <string name="msgToastPOIDeletet">POI {0} deleted.</string>
+  
+
+
 </resources>
