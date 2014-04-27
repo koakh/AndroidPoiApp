@@ -11,6 +11,7 @@ using Android.Views;
 using Android.Widget;
 using Android.Util;
 using Android.Locations;
+using POIApp.Lib;
 //using Android.Provider;
 
 namespace POIApp
@@ -93,6 +94,32 @@ namespace POIApp
       _longEditText.Text = _poi.Longitude.ToString();
     }
 
+    //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+    //Save/Restore State
+    protected override void OnSaveInstanceState(Bundle outState)
+    {
+      base.OnSaveInstanceState(outState);
+
+      outState.PutBoolean("obtaininglocation", _obtainingLocation);
+
+      // if we were waiting on location updates; cancel
+      if (_obtainingLocation)
+      {
+        _locMgr.RemoveUpdates(this);
+      }
+    }
+
+    protected override void OnRestoreInstanceState(Bundle savedInstanceState)
+    {
+      base.OnRestoreInstanceState(savedInstanceState);
+
+      _obtainingLocation = savedInstanceState.GetBoolean("obtaininglocation");
+
+      // if we were waiting on location updates; restart
+      if (_obtainingLocation)
+        GetLocationClicked(this, new EventArgs());
+    }
+    
     //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
     //Menu
     public override bool OnCreateOptionsMenu(IMenu menu)
@@ -229,16 +256,25 @@ namespace POIApp
     //_locationImageButton.Click Event Handler
     protected void GetLocationClicked(object sender, EventArgs e)
     {
-      _obtainingLocation = true;
+      //Check if GPS is Enabled
+      if (!Utils.IsGPSProviderEnabled(_locMgr))
+      {
+        Utils.DialogEnableGPSProvider(this);
+      }
+      //We Can Request Location, Proceed
+      else
+      {
+        _obtainingLocation = true;
 
-      //Call Static Method
-      _progressDialog = ProgressDialog.Show(this, "", this.Resources.GetString(Resource.String.msgDialogPOIGetLocation));
+        //Call Static Method
+        _progressDialog = ProgressDialog.Show(this, "", this.Resources.GetString(Resource.String.msgDialogPOIGetLocation));
 
-      Criteria criteria = new Criteria();
-      criteria.Accuracy = Accuracy.NoRequirement;
-      criteria.PowerRequirement = Power.NoRequirement;
+        Criteria criteria = new Criteria();
+        criteria.Accuracy = Accuracy.NoRequirement;
+        criteria.PowerRequirement = Power.NoRequirement;
 
-      _locMgr.RequestSingleUpdate(criteria, this, null);
+        _locMgr.RequestSingleUpdate(criteria, this, null);
+      }
     }
 
     // _mapImageButton.Click += MapClicked EventHandler

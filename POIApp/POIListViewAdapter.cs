@@ -99,7 +99,7 @@ namespace POIApp
         // Assign Calculated Distance to distanceTextView
         view.FindViewById<TextView>(Resource.Id.distanceTextView).Text = String.Format("{0:0,0.00} {1}", distance, _r.GetString(Resource.String.unitOfLengthKm));
         
-        Log.Info(GlobalApp.TAG, String.Format("distance: [{0}]", distance));
+        //Log.Info(GlobalApp.TAG, String.Format("distance: [{0}]", distance));
       }
       else
       {

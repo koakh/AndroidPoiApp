@@ -15,9 +15,9 @@ namespace POIApp
 {
   static class GlobalApp
   {
-    public static string TAG = "POIApp";
+    public static readonly string TAG = "POIApp";
     // Request Codes
-    public static int REQUEST_CODE_LOCATION_SOURCE_SETTINGS = 1;
+    public static readonly int REQUEST_CODE_LOCATION_SOURCE_SETTINGS = 1;
   }
 
   [Activity(Label = "POIs", MainLauncher = true)]
@@ -28,8 +28,10 @@ namespace POIApp
     private POIListViewAdapter _adapter;
     private LocationManager _locMgr;
 
+    private bool _isEnableGpsRequested = false;
+
     //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
-    //BOF LifeCycle
+    //LifeCycle
     protected override void OnCreate(Bundle bundle)
     {
       //Call SuperClass OnCreate
@@ -41,9 +43,6 @@ namespace POIApp
 
       // request an LocationService instance
       _locMgr = GetSystemService(Context.LocationService) as LocationManager;
-
-      //Check if GPS is Enabled
-      if (!Utils.IsGPSProviderEnabled(_locMgr)) Utils.DialogEnableGPSProvider(this);
 
       // Hooking up POIListViewAdapter
       _poiListView = FindViewById<ListView>(Resource.Id.poiListView);
@@ -94,6 +93,16 @@ namespace POIApp
           Log.Info(GlobalApp.TAG, String.Format("RequestLocationUpdate Exception: {0}", e));
         }
       }
+      //Request if user Wants to enable GPS
+      else
+      {
+        if (!_isEnableGpsRequested)
+        {
+          //Enable it, only ask one time, in onCreate
+          _isEnableGpsRequested = true;
+          Utils.DialogEnableGPSProvider(this);
+        }
+      }
     }
 
     // Another activity is taking focus (this activity is about to be "paused").
@@ -118,6 +127,24 @@ namespace POIApp
     {
       base.OnDestroy();
       //Log.Info(GlobalApp.TAG, "OnDestroy()");
+    }
+
+    //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+    //Save/Restore State
+    protected override void OnSaveInstanceState(Bundle outState)
+    {
+      base.OnSaveInstanceState(outState);
+
+      Log.Info(GlobalApp.TAG, String.Format("OnSaveInstanceState _isEnableGpsRequested:[{0}]", _isEnableGpsRequested));
+      outState.PutBoolean("isEnableGpsRequested", _isEnableGpsRequested);
+    }
+
+    protected override void OnRestoreInstanceState(Bundle savedInstanceState)
+    {
+      base.OnRestoreInstanceState(savedInstanceState);
+
+      _isEnableGpsRequested = savedInstanceState.GetBoolean("isEnableGpsRequested");
+      Log.Info(GlobalApp.TAG, String.Format("OnRestoreInstanceState _isEnableGpsRequested:[{0}]", _isEnableGpsRequested));
     }
 
     //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
@@ -166,18 +193,23 @@ namespace POIApp
 
     //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
     //Activity Result
-    protected void onActivityResult(int requestCode, int resultCode, Intent data)
+    //http://docs.xamarin.com/recipes/android/fundamentals/activity/start_activity_for_result/
+    protected override void OnActivityResult(int requestCode, Result resultCode, Intent data)
     {
+      base.OnActivityResult(requestCode, resultCode, data);
+      
+      Log.Info(GlobalApp.TAG, String.Format("onActivityResult: requestCode:[{0}], resultCode:[{1}], data:[{2}]", requestCode, resultCode, data));
+
       if (requestCode == GlobalApp.REQUEST_CODE_LOCATION_SOURCE_SETTINGS && resultCode == 0)
       {
         String provider = Settings.Secure.GetString(this.ContentResolver, Settings.Secure.LocationProvidersAllowed);
         if (provider != null)
         {
-          Log.Info(GlobalApp.TAG, "Location providers: {0}" + provider);
+          Log.Info(GlobalApp.TAG, String.Format("onActivityResult: User enable : {0}", provider));
         }
         else
         {
-          Log.Info(GlobalApp.TAG, "Users did not switch on the GPS: {0}" + provider);
+          Log.Info(GlobalApp.TAG, String.Format("onActivityResult: User did not enable : {0}", provider));
         }
       }
     }
