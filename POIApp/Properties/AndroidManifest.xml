@@ -1,9 +1,13 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android" package="POIApp.POIApp" android:installLocation="auto">
+  <!--Uses-->  
 	<uses-sdk android:minSdkVersion="15" android:targetSdkVersion="15" />
 	<!--Application-->
 	<application android:label="POIApp" android:icon="@drawable/ic_app"></application>
-	<!--Permissions-->
+  <!--Activity-->
+  <!--Preventing activity destruction-->
+  <activity android:name="POIApp.POIListActivity" android:configChanges="orientation|screenSize" android:label="POIs" />
+  <!--Permissions-->
 	<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 	<uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
 	<uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
