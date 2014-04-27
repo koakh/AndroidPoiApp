@@ -55,6 +55,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="IPOIDataService.cs" />
+    <Compile Include="Lib\Utils.cs" />
     <Compile Include="POIData.cs" />
     <Compile Include="POIDetailActivity.cs" />
     <Compile Include="POIListActivity.cs" />

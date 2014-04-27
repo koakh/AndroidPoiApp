@@ -1,22 +1,39 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
+  <!-- Application -->
   <string name="ApplicationName">POIApp</string>
+  
+  <!-- Menu -->
   <string name="MenuNew">New</string>
   <string name="MenuRefresh">Refresh</string>
+  
+  <!-- Paths -->
   <string name="pathAppData">/mnt/shared/SharedFolder</string>
   <string name="pathAppDataFolder">POIApp</string>
 
+  <!-- Labels -->
+  <string name="labelOk">OK</string>
+  <string name="labelCancel">Cancel</string>
+  <string name="labelYes">Yes</string>
+  <string name="labelNo">No</string>
+  
+  <!-- Validation Messages -->
   <string name="msgValidatePOIName">Name cannot be empty</string>
   <string name="msgValidatePOILatitudeDecimalRange">Latitude must be a decimal value between -90 and 90</string>
   <string name="msgValidatePOILatitudeDecimal">Latitude must be valid decimal number</string>
   <string name="msgValidatePOILongitudeDecimalRange">Longitude must be a decimal value between -180 and 180</string>
   <string name="msgValidatePOILongitudeDecimal">Longitude must be valid decimal number</string>
 
+  <!-- dialogs -->
   <string name="msgDialogPOIDelete">Are you sure you want to delete POI {0}?</string>
+  <string name="msgDialogPOIGetLocation">Obtaining location...</string>
+  <string name="msgDialogRequestEnableGPSProvider">GPS Provider is disabled, Do you want to enable it?</string>
+  
+  <!-- Toast Messages -->
+  <string name="msgToastPOIDeleted">POI {0} deleted.</string>
 
-  <string name="msgToastPOIDeletet">POI {0} deleted.</string>
-
+  <!-- Units -->
   <string name="unitOfLengthMiles">miles</string>
   <string name="unitOfLengthMetre">metre</string>
   <string name="unitOfLengthKm">km</string>

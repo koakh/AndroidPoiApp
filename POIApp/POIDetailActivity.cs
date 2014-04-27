@@ -11,14 +11,13 @@ using Android.Views;
 using Android.Widget;
 using Android.Util;
 using Android.Locations;
+//using Android.Provider;
 
 namespace POIApp
 {
   [Activity(Label = "POIDetailActivity")]
   public class POIDetailActivity : Activity, ILocationListener
   {
-    //Resources
-    Android.Content.Res.Resources _r;
     // Private declarations 
     PointOfInterest _poi;
     LocationManager _locMgr;
@@ -36,7 +35,9 @@ namespace POIApp
 
     ProgressDialog _progressDialog;
     bool _obtainingLocation = false;
-    
+
+    //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+    //LifeCycle
     protected override void OnCreate(Bundle bundle)
     {
       base.OnCreate(bundle);
@@ -46,10 +47,7 @@ namespace POIApp
       // Get LocationManager Reference
       _locMgr = GetSystemService(Context.LocationService) as LocationManager;
 
-      //Get Resources
-      _r = this.Resources;
-
-      //bind private variables to user interface widget
+      // Bind private variables to user interface widget
       _nameEditText = FindViewById<EditText>(Resource.Id.nameEditText);
       _descrEditText = FindViewById<EditText>(Resource.Id.descrEditText);
       _addrEditText = FindViewById<EditText>(Resource.Id.addrEditText);
@@ -84,6 +82,8 @@ namespace POIApp
       UpdateUI();
     }
 
+    //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+    //LifeCycle
     protected void UpdateUI()
     {
       _nameEditText.Text = _poi.Name;
@@ -93,6 +93,8 @@ namespace POIApp
       _longEditText.Text = _poi.Longitude.ToString();
     }
 
+    //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+    //Menu
     public override bool OnCreateOptionsMenu(IMenu menu)
     {
       MenuInflater.Inflate(Resource.Menu.POIDetailMenu, menu);
@@ -129,63 +131,6 @@ namespace POIApp
       }
     }
 
-    private bool Validate()
-    {
-      bool isValid = true;
-
-      if (String.IsNullOrEmpty(_nameEditText.Text))
-      {
-        _nameEditText.Error = _r.GetString(Resource.String.msgValidatePOIName);
-        isValid = false;
-      }
-      else
-        _nameEditText.Error = null;
-
-      double? tempLatitude = null;
-      if (!String.IsNullOrEmpty(_latEditText.Text))
-      {
-        try
-        {
-          tempLatitude = Double.Parse(_latEditText.Text);
-          if ((tempLatitude > 90) | (tempLatitude < -90))
-          {
-            _latEditText.Error = _r.GetString(Resource.String.msgValidatePOILatitudeDecimalRange);
-            isValid = false;
-          }
-          else
-            _latEditText.Error = null;
-        }
-        catch
-        {
-          _latEditText.Error = _r.GetString(Resource.String.msgValidatePOILatitudeDecimal);
-          isValid = false;
-        }
-      }
-
-      double? tempLongitude = null;
-      if (!String.IsNullOrEmpty(_longEditText.Text))
-      {
-        try
-        {
-          tempLongitude = Double.Parse(_longEditText.Text);
-          if ((tempLongitude > 180) | (tempLongitude < -180))
-          {
-            _longEditText.Error = _r.GetString(Resource.String.msgValidatePOILongitudeDecimalRange);
-            isValid = false;
-          }
-          else
-            _longEditText.Error = null;
-        }
-        catch
-        {
-          _longEditText.Error = _r.GetString(Resource.String.msgValidatePOILongitudeDecimal);
-          isValid = false;
-        }
-      }
-
-      return isValid;
-    }
-
     private void SavePOI()
     {
       if (Validate())
@@ -202,31 +147,93 @@ namespace POIApp
       }
     }
 
+    private bool Validate()
+    {
+      bool isValid = true;
+
+      if (String.IsNullOrEmpty(_nameEditText.Text))
+      {
+        _nameEditText.Error = this.Resources.GetString(Resource.String.msgValidatePOIName);
+        isValid = false;
+      }
+      else
+        _nameEditText.Error = null;
+
+      double? tempLatitude = null;
+      if (!String.IsNullOrEmpty(_latEditText.Text))
+      {
+        try
+        {
+          tempLatitude = Double.Parse(_latEditText.Text);
+          if ((tempLatitude > 90) | (tempLatitude < -90))
+          {
+            _latEditText.Error = this.Resources.GetString(Resource.String.msgValidatePOILatitudeDecimalRange);
+            isValid = false;
+          }
+          else
+            _latEditText.Error = null;
+        }
+        catch
+        {
+          _latEditText.Error = this.Resources.GetString(Resource.String.msgValidatePOILatitudeDecimal);
+          isValid = false;
+        }
+      }
+
+      double? tempLongitude = null;
+      if (!String.IsNullOrEmpty(_longEditText.Text))
+      {
+        try
+        {
+          tempLongitude = Double.Parse(_longEditText.Text);
+          if ((tempLongitude > 180) | (tempLongitude < -180))
+          {
+            _longEditText.Error = this.Resources.GetString(Resource.String.msgValidatePOILongitudeDecimalRange);
+            isValid = false;
+          }
+          else
+            _longEditText.Error = null;
+        }
+        catch
+        {
+          _longEditText.Error = this.Resources.GetString(Resource.String.msgValidatePOILongitudeDecimal);
+          isValid = false;
+        }
+      }
+
+      return isValid;
+    }
+
     protected void DeletePOI()
     {
       AlertDialog.Builder alertConfirm = new AlertDialog.Builder(this);
       alertConfirm.SetCancelable(false);
       //ConfirmDelete EventHandler
-      alertConfirm.SetPositiveButton("OK", ConfirmDelete);
+      alertConfirm.SetPositiveButton("OK", DeletePOIConfirm);
       //Empty event handler
       alertConfirm.SetNegativeButton("Cancel", delegate { });
-      alertConfirm.SetMessage(String.Format(_r.GetString(Resource.String.msgDialogPOIDelete), _poi.Name));
+      alertConfirm.SetMessage(String.Format(this.Resources.GetString(Resource.String.msgDialogPOIDelete), _poi.Name));
       alertConfirm.Show();
     }
 
-    protected void ConfirmDelete(object sender, EventArgs e)
+    protected void DeletePOIConfirm(object sender, EventArgs e)
     {
       POIData.Service.DeletePOI(_poi);
-      Toast toast = Toast.MakeText(this, String.Format(_r.GetString(Resource.String.msgToastPOIDeletet), _poi.Name), ToastLength.Short);
+      Toast toast = Toast.MakeText(this, String.Format(this.Resources.GetString(Resource.String.msgToastPOIDeleted), _poi.Name), ToastLength.Short);
       toast.Show();
       Finish();
     }
 
+    //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+    //Button EventHandler
+    //_locationImageButton.Click Event Handler
     protected void GetLocationClicked(object sender, EventArgs e)
     {
       _obtainingLocation = true;
-      _progressDialog = ProgressDialog.Show(this, "", "Obtaining location...");
-      
+
+      //Call Static Method
+      _progressDialog = ProgressDialog.Show(this, "", this.Resources.GetString(Resource.String.msgDialogPOIGetLocation));
+
       Criteria criteria = new Criteria();
       criteria.Accuracy = Accuracy.NoRequirement;
       criteria.PowerRequirement = Power.NoRequirement;
@@ -234,10 +241,12 @@ namespace POIApp
       _locMgr.RequestSingleUpdate(criteria, this, null);
     }
 
+    // _mapImageButton.Click += MapClicked EventHandler
     private void MapClicked(object sender, EventArgs e)
     {
     }
 
+    //_photoImageButton.Click += NewPhotoClicked EventHandler
     private void NewPhotoClicked(object sender, EventArgs e)
     {
     }
@@ -246,7 +255,7 @@ namespace POIApp
 
     public void OnLocationChanged(Location location)
     {
-      _latEditText.Text = location.Latitude.ToString(); 
+      _latEditText.Text = location.Latitude.ToString();
       _longEditText.Text = location.Longitude.ToString();
 
       // Reverse GeoCoding
@@ -258,6 +267,7 @@ namespace POIApp
         UpdateAddressFields(addresses.First());
       }
 
+      // Cancel Progress Dialog
       _progressDialog.Cancel();
       _obtainingLocation = false;
     }
